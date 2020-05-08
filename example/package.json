@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
+    "android": "npx react-native run-android",
     "clean": "cd android && ./gradlew clean && cd ..",
-    "ios": "react-native run-ios",
+    "ios": "npx react-native run-ios",
     "lint": "eslint .",
     "pod": "cd ios && pod install && cd ..",
     "start": "react-native start",
@@ -13,7 +13,10 @@
   },
   "dependencies": {
     "react": "16.11.0",
-    "react-native": "0.62.2"
+    "react-native": "0.62.2",
+    "react-native-platform-touchable": "^1.1.1",
+    "react-native-root-siblings": "^4.0.6",
+    "react-native-vector-icons": "^6.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

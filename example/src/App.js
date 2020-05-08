@@ -6,108 +6,93 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+  Button,
+  LayoutAnimation,
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
-  Text,
   StatusBar,
+  Platform,
+  UIManager,
 } from 'react-native';
+import { RootSiblingParent } from 'react-native-root-siblings';
+import SearchBar from './searchbar';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const Wrapper = Platform.OS === 'ios' ? React.Fragment : RootSiblingParent;
 
-const App: () => React$Node = () => {
+function App() {
+  const [theme, setTheme] = useState('light');
+  const isDark = theme === 'dark';
+
+  useEffect(() => {
+    if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }, []);
+
+  const containerStyle = {
+    backgroundColor: isDark ? '#121212' : '#F5F5F5',
+  };
+  const headerStyle = {
+    backgroundColor: isDark ? '#1f1f1f' : 'white',
+  };
+
+  const onThemeChange = () => {
+    LayoutAnimation.spring;
+    setTheme(v => {
+      return v === 'light' ? 'dark' : 'light';
+    });
+  };
+
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
+    <Wrapper>
+      <StatusBar
+        barStyle={isDark ? 'light-content' : 'dark-content'}
+        backgroundColor={isDark ? '#121212' : '#F5F5F5'}
+      />
+      <SafeAreaView style={[styles.flex, containerStyle]} >
+        <View style={[styles.header, headerStyle]} >
+
+          <SearchBar theme={theme} />
+
+        </View>
+        <View style={styles.content} >
+          <Button
+            onPress={onThemeChange}
+            title={isDark ? 'Change to Light' : 'Change to Dark'}
+            color={isDark && Platform.OS === 'ios' ? 'white' : undefined}
+          />
+        </View>
       </SafeAreaView>
-    </>
+    </Wrapper>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  flex: {
+    flex: 1,
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  header: {
+    height: 56,
+    justifyContent: 'center',
+    ...Platform.select({
+      ios: {
+        shadowColor: 'black',
+        shadowOpacity: 0.25,
+        shadowRadius: 1 * 0.75,
+        shadowOffset: { height: 1 * 0.45 },
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
   },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+  content: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
   },
 });
 
