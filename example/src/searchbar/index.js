@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Alert,
   LayoutAnimation,
@@ -9,30 +9,53 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import RootSiblings from 'react-native-root-siblings';
+import RootSiblings, { RootSiblingParent } from 'react-native-root-siblings';
+import AsyncStorage from '@react-native-community/async-storage';
+
 import ActionButton from './components/ActionButton';
 import HistoryItem from './components/HistoryItem';
+import SpeechModal from './components/SpeechModal';
 import helper from './helper';
 import { useDimensions } from './hooks';
 
 type Props = {
+  /**
+   * Default value: `light`
+   */
   theme: 'light' | 'dark';
+  /**
+   * Default value: `58`, considering a header with height `56`
+   */
+  historyTopOffset: Number;
+  onSearch(): void;
 };
 
-const baseHistory = ['zettabrasil','siggma','drsnoopy','redbull','javascript','react native'];
+export const Wrapper = Platform.OS === 'ios' ? React.Fragment : RootSiblingParent;
+
 const ios = Platform.OS === 'ios';
+const KEY_STORE = 'searchbar:history';
 
 function SearchBar(props: Props) {
   const { isIphoneX } = useDimensions();
 
   const [value, setValue] = useState('');
   const [search, setSearch] = useState(false);
+  const [speech, setSpeech] = useState(false);
 
   const elements = useRef([]);
   const input = useRef();
-  const history = useRef(baseHistory);
-  const savedHistory = useRef(baseHistory);
+  const history = useRef([]);
+  const savedHistory = useRef([]);
   const timeoutID = useRef(-1);
+
+  useEffect(() => {
+    AsyncStorage.getItem(KEY_STORE)
+      .then(data => {
+        savedHistory.current = data ? JSON.parse(data) : [];
+        history.current = savedHistory.current;
+      })
+      .catch(() => null);
+  }, []);
 
   const showHistory = () => {
     if (elements.current.length) {
@@ -54,18 +77,27 @@ function SearchBar(props: Props) {
     }
   };
 
-  const onHistorySelected = (text, index) => {
-    const el = savedHistory.current.splice(index, 1);
-    el[0] && savedHistory.current.unshift(el[0]);
+  const onHistorySelected = (text) => {
+    const index = savedHistory.current.indexOf(text);
+    if (index > -1) {
+      const el = savedHistory.current.splice(index, 1);
+      savedHistory.current.unshift(el[0]);
+      AsyncStorage.setItem(KEY_STORE, JSON.stringify(savedHistory.current));
+    }
     setValue(text);
     input.current.blur();
   };
 
-  const onHistoryDelete = index => {
+  const onHistoryDelete = (text, index) => {
     Alert.alert('', 'Remover item do histórico?', [
       { text: 'Cancelar' },
       { text: 'Remover', style: 'destructive', onPress: () => {
         history.current.splice(index, 1);
+        const idx = savedHistory.current.indexOf(text);
+        if (idx > -1) {
+          savedHistory.current.splice(idx, 1);
+          AsyncStorage.setItem(KEY_STORE, JSON.stringify(savedHistory.current));
+        }
         updateHistory();
       }},
     ]);
@@ -91,9 +123,16 @@ function SearchBar(props: Props) {
     input.current.focus();
   };
 
-  const onActionButtonPress = () => {
-    LayoutAnimation.easeInEaseOut();
-    setSearch(v => true);
+  const onActionButtonPress = mic => {
+    if (mic) {
+      input.current.blur();
+      setTimeout(() => {
+        setSpeech(true);
+      }, 100);
+    } else {
+      LayoutAnimation.easeInEaseOut();
+      setSearch(v => true);
+    }
   };
 
   const onBackButtonPress = () => {
@@ -122,13 +161,22 @@ function SearchBar(props: Props) {
     if (val && index < 0) {
       savedHistory.current.unshift(val);
       history.current = savedHistory.current;
+      AsyncStorage.setItem(KEY_STORE, JSON.stringify(savedHistory.current));
     }
+  };
+
+  const onSpeechResults = results => {
+    setSpeech(false);
+    setTimeout(() => {
+      input.current.focus();
+      results && onChangeText(results);
+    }, 250);
   };
 
   const historyElement = () => {
     const style = {
       backgroundColor: props.theme === 'dark' ? '#1f1f1f' : 'white',
-      top: helper.getSuggestionsOffset(isIphoneX, 58),
+      top: helper.getSuggestionsOffset(isIphoneX, props.historyTopOffset),
     };
     return (
       <View style={[styles.suggestions, style]} >
@@ -141,8 +189,8 @@ function SearchBar(props: Props) {
     <HistoryItem
       key={`his-${index}`}
       item={text}
-      onLongPress={() => onHistoryDelete(index)}
-      onPress={() => onHistorySelected(text, index)}
+      onLongPress={() => onHistoryDelete(text, index)}
+      onPress={() => onHistorySelected(text)}
       theme={props.theme}
     />
   );
@@ -153,7 +201,7 @@ function SearchBar(props: Props) {
     return (
       <ActionButton
         background={helper.getBackgroundColor(props.theme)}
-        onPress={onActionButtonPress}
+        onPress={() => onActionButtonPress(search)}
         style={[styles.actionButton, position]}
         touchDisabled={false} >
         <Icon name={search ? 'microphone' : 'magnify'} color={helper.getIconColor(props.theme)} size={22} />
@@ -240,6 +288,11 @@ function SearchBar(props: Props) {
       { backButton() }
       { renderInput() }
       { actionButton() }
+      <SpeechModal
+        visible={speech}
+        theme={props.theme}
+        onRequestClose={onSpeechResults}
+      />
     </View>
   );
 }
@@ -301,6 +354,7 @@ const styles = StyleSheet.create({
 
 SearchBar.defaultProps = {
   theme: 'light',
+  historyTopOffset: 58,
 };
 
 export default SearchBar;

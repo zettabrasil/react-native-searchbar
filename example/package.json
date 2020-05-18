@@ -12,6 +12,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.10.0",
+    "@react-native-community/voice": "^1.1.4",
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-platform-touchable": "^1.1.1",

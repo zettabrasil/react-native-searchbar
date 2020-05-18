@@ -39,6 +39,10 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSMicrophoneUsageDescription</key>
+  <string>Precisamos da sua permissão para utilizar o microfone para realizar busca de texto por voz</string>
+  <key>NSSpeechRecognitionUsageDescription</key>
+  <string>Precisamos da sua permissão para utilizar o reconhecimento de voz para realizar busca de texto</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

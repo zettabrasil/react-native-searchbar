@@ -17,4 +17,11 @@ export default {
   getSuggestionsOffset(ix, v) {
     return ix ? v + 43 : v;
   },
+  // Modal
+  getModalBackground(theme) {
+    return theme === 'light' ? 'white' : '#121212';
+  },
+  getModalText(theme) {
+    return this.getInputTextColor(theme);
+  },
 };

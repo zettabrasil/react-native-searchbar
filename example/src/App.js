@@ -17,10 +17,7 @@ import {
   Platform,
   UIManager,
 } from 'react-native';
-import { RootSiblingParent } from 'react-native-root-siblings';
-import SearchBar from './searchbar';
-
-const Wrapper = Platform.OS === 'ios' ? React.Fragment : RootSiblingParent;
+import SearchBar, { Wrapper } from './searchbar';
 
 function App() {
   const [theme, setTheme] = useState('light');
@@ -55,7 +52,7 @@ function App() {
       <SafeAreaView style={[styles.flex, containerStyle]} >
         <View style={[styles.header, headerStyle]} >
 
-          <SearchBar theme={theme} />
+          <SearchBar theme={theme} historyTopOffset={50} />
 
         </View>
         <View style={styles.content} >
@@ -75,7 +72,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    height: 56,
+    height: 48,
     justifyContent: 'center',
     ...Platform.select({
       ios: {
