@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import {
-  Button,
   Modal,
   Platform,
   StatusBar,
@@ -10,18 +9,21 @@ import {
 } from 'react-native';
 import Voice from '@react-native-community/voice';
 import helper from '../helper';
+import Icon from './Icon';
+import ActionButton from './ActionButton';
 
 type Props = {
-  visible: Boolean;
-  theme: 'light' | 'dark',
+  background: String;
   onRequestClose(results: String): void;
+  theme: 'light' | 'dark',
+  visible: Boolean;
 }
 
 function Speech(props: Props) {
   const [results, setResults] = useState('');
   const savedResults = useRef('');
 
-  const backgroundStyle = { backgroundColor: helper.getModalBackground(props.theme) };
+  const backgroundStyle = { backgroundColor: helper.getModalBackground(props) };
   const titleStyle = { color: helper.getModalText(props.theme) };
   const speechStyle = {
     color: helper.getModalText(props.theme),
@@ -54,6 +56,18 @@ function Speech(props: Props) {
     }
   }, [props.visible]);
 
+  const actionButton = () => {
+    return (
+      <ActionButton
+        background={helper.getBackgroundColor(props.theme)}
+        onPress={onRequestClose}
+        style={styles.actionButton}
+        touchDisabled={false} >
+        <Icon name='checkbox-marked-circle-outline' color={helper.getIconColor(props.theme)} size={34} />
+      </ActionButton>
+    );
+  };
+
   return (
     <Modal
       animationType='fade'
@@ -62,7 +76,11 @@ function Speech(props: Props) {
       visible={props.visible}
     >
       <>
-        <StatusBar barStyle='light-content' backgroundColor='rgba(0,0,0,0.5)' />
+        <StatusBar
+          animated={true}
+          barStyle='light-content'
+          backgroundColor={helper.getModalStatusbarBackground(props)}
+        />
         <View style={styles.flex} >
           <View style={[styles.card, backgroundStyle]} >
             <View style={styles.body} >
@@ -72,7 +90,7 @@ function Speech(props: Props) {
               </Text>
             </View>
             <View style={styles.button} >
-              <Button title='Pronto' onPress={onRequestClose} />
+              { actionButton() }
             </View>
           </View>
         </View>
@@ -123,6 +141,10 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     marginTop: 96,
     opacity: 0.6,
+  },
+  actionButton: {
+    width: 40,
+    height: 40,
   },
 });
 

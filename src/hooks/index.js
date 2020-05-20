@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Dimensions, Platform } from 'react-native';
+import { BackHandler, Dimensions, Platform } from 'react-native';
 
 const w = Dimensions.get('window'),
   s = Dimensions.get('screen'),
@@ -11,6 +11,14 @@ function isDimensionsIphoneX({ height, width }) {
 
 function isOrientationLandscape({ width, height }) {
   return width > height;
+}
+
+export function useBackHandler(handler: () => boolean) {
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handler);
+
+    return () => BackHandler.removeEventListener('hardwareBackPress', handler);
+  }, [handler]);
 }
 
 export function useDimensions() {

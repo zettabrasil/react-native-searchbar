@@ -30,13 +30,13 @@ interface Props {
 }
 
 const Button = React.memo((props: Props) => (
-  <View style={[styles.iconButtonHeader, props.style]} >
+  <View style={[styles.iconButton, props.style]} >
     <Touchable
-      activeOpacity={0.6}
-      background={Touchable.Ripple(props.background, true)}
+      activeOpacity={0.5}
+      foreground={Touchable.Ripple(props.background, true)}
       disabled={props.touchDisabled}
       onPress={props.onPress} >
-      <View style={styles.iconHeader} >
+      <View style={styles.icon} >
         {props.children}
       </View>
     </Touchable>
@@ -45,20 +45,20 @@ const Button = React.memo((props: Props) => (
 
 Button.defaultProps = {
   touchDisabled: false,
-}
+};
 
 const styles = StyleSheet.create({
-  iconButtonHeader: {
-    width: 40,
-    height: 40,
-    borderRadius: 20
+  iconButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 100,
   },
-  iconHeader: {
-    width: 40,
-    height: 40,
+  icon: {
+    width: 36,
+    height: 36,
     alignItems: 'center',
-    justifyContent: 'center'
-  }
+    justifyContent: 'center',
+  },
 });
 
 export default Button;
