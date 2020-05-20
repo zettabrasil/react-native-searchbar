@@ -22,4 +22,4 @@ npx pod-install
 
 ## Usage
 
-Checkout the [example](https://github.com/zettabrasil/react-native-searchbar/example)
+Checkout the [example](https://github.com/zettabrasil/react-native-searchbar/tree/master/example)
