@@ -31,6 +31,8 @@ function Speech(props: Props) {
     fontWeight: results ? 'bold' : 'normal',
   };
 
+  const lang = helper.lang();
+
   const onRequestClose = () => {
     props.onRequestClose && props.onRequestClose(savedResults.current);
   };
@@ -50,7 +52,7 @@ function Speech(props: Props) {
     if (props.visible) {
       setResults('');
       savedResults.current = '';
-      Voice.start('pt-BR');
+      Voice.start(lang.speech_voice_config);
     } else {
       Voice.stop();
     }
@@ -84,9 +86,11 @@ function Speech(props: Props) {
         <View style={styles.flex} >
           <View style={[styles.card, backgroundStyle]} >
             <View style={styles.body} >
-              <Text style={[styles.listening, titleStyle]} >Ouvindo...</Text>
+              <Text style={[styles.listening, titleStyle]} >
+                { lang.speech_listening_label }
+              </Text>
               <Text style={[styles.results, speechStyle]} >
-                {`"${results || 'Fale alguma coisa...'}"`}
+                {`"${results || lang.speech_placeholder_label}"`}
               </Text>
             </View>
             <View style={styles.button} >

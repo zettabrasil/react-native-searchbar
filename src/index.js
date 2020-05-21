@@ -28,6 +28,7 @@ type Props = {
    * Background color. This prop must be combined with the `theme` prop.
    */
   background: String;
+  inputPlaceholder: String;
   headerLeft: JSX.Element;
   headerRight: JSX.Element;
   headerTitle: String | JSX.Element;
@@ -61,6 +62,8 @@ function SearchBar(props: Props) {
   const searchRef = useRef(false);
   const historyTimeout = useRef(-1);
   const searchTimeout = useRef(-1);
+
+  const lang = helper.lang();
 
   useEffect(() => {
     AsyncStorage.getItem(KEY_STORE)
@@ -116,12 +119,11 @@ function SearchBar(props: Props) {
   };
 
   const onHistoryDelete = (text) => {
-    Alert.alert('', 'Remover item do histórico?', [
-      { text: 'Cancelar' },
-      { text: 'Remover', style: 'destructive', onPress: () => {
+    Alert.alert('', lang.dialog_remove_message, [
+      { text: lang.dialog_remove_cancel_btn },
+      { text: lang.dialog_remove_confirm_btn, style: 'destructive', onPress: () => {
         const index = savedHistory.current.indexOf(text);
         if (index > -1) {
-          console.log('remover do historico');
           savedHistory.current.splice(index, 1);
           history.current = JSON.parse(JSON.stringify(savedHistory.current));
           AsyncStorage.setItem(KEY_STORE, JSON.stringify(savedHistory.current));
@@ -281,7 +283,7 @@ function SearchBar(props: Props) {
           onChangeText={onChangeText}
           onFocus={onFocus}
           onSubmitEditing={() => onSubmit(value)}
-          placeholder='Pesquisar'
+          placeholder={lang.input_placeholder}
           placeholderTextColor={helper.getPlaceHolderColor(props.theme)}
           ref={input}
           returnKeyType='search'
@@ -418,8 +420,8 @@ const styles = StyleSheet.create({
 });
 
 SearchBar.defaultProps = {
-  theme: 'light',
   historyTopOffset: 56,
+  theme: 'light',
 };
 
 export default SearchBar;

@@ -1,4 +1,11 @@
+import { NativeModules, Platform } from 'react-native';
 import Color from 'color';
+import lang from './lang';
+
+const locale = Platform.OS === 'ios'
+  ? NativeModules.SettingsManager.settings.AppleLocale ||
+    NativeModules.SettingsManager.settings.AppleLanguages[0] //iOS 13
+  : NativeModules.I18nManager.localeIdentifier;
 
 export default {
   getBackgroundColor(theme) {
@@ -40,5 +47,10 @@ export default {
   },
   getModalText(theme) {
     return this.getInputTextColor(theme);
+  },
+
+  // Lang
+  lang() {
+    return lang(locale?.toLowerCase());
   },
 };
