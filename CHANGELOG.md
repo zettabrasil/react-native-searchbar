@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.1](https://github.com/zettabrasil/react-native-searchbar/compare/v1.0.0...v1.0.1) (2020-05-21)
+
+
+### Features
+
+* **lang:** add languages support ([afa3a46](https://github.com/zettabrasil/react-native-searchbar/commit/afa3a4611e7e6608b6bd8fe0b9be1affe8d3556f))
+
 ## 1.0.0 (2020-05-20)
 
 

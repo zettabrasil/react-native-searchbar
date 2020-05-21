@@ -1,6 +1,6 @@
 {
   "name": "@zettabrasil/react-native-searchbar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Search Bar for iOS & Android with voice and history features",
   "main": "src/index.js",
   "scripts": {
