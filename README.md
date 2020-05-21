@@ -24,7 +24,7 @@ npx pod-install
 
 ## Usage
 
-Checkout the [example](https://github.com/zettabrasil/react-native-searchbar/tree/master/example)
+Checkout the [example](https://github.com/zettabrasil/react-native-searchbar/blob/master/example/src/App.js)
 
 This library depends on [react-native-root-siblings](https://github.com/magicismight/react-native-root-siblings) to work properly. So, it is necessary to make the following configuration in the root app component:
 
