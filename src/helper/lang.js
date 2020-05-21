@@ -23,14 +23,13 @@ const lang = {
   },
 };
 
-type Key =
-  | 'en_us'
-  | 'pt_br';
-
-export default function(key: Key) {
+export default function(locale) {
+  const key = locale?.replace('-', '_')?.toLowerCase();
   switch (key) {
     case 'pt_br':
-      return Object.freeze(Object.assign(lang.en_us, lang.pt_br));
+      return Object.freeze(Object.assign({}, lang.en_us, lang.pt_br));
+    case 'pt_us':
+      return Object.freeze(Object.assign({}, lang.en_us, lang.pt_br));
     default:
       return Object.freeze(lang.en_us);
   }

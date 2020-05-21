@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
       fontWeight: '600',
     },
     android: {
-      fontSize: 20,
+      fontSize: 19,
       fontFamily: 'sans-serif-medium',
       fontWeight: 'normal',
       marginStart: 8,

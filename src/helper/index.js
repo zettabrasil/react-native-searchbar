@@ -1,15 +1,15 @@
-import { NativeModules, Platform } from 'react-native';
+import { NativeModules, Platform, I18nManager } from 'react-native';
 import Color from 'color';
 import lang from './lang';
 
 const locale = Platform.OS === 'ios'
-  ? NativeModules.SettingsManager.settings.AppleLocale ||
-    NativeModules.SettingsManager.settings.AppleLanguages[0] //iOS 13
-  : NativeModules.I18nManager.localeIdentifier;
+  ? NativeModules.SettingsManager.settings?.AppleLanguages[0] || //iOS 13
+    NativeModules.SettingsManager.settings?.AppleLocale
+  : NativeModules.I18nManager?.localeIdentifier;
 
 export default {
   getBackgroundColor(theme) {
-    return theme === 'light' ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.1)';
+    return theme === 'light' ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.12)';
   },
   getIconColor(theme) {
     return theme === 'light' ? 'rgba(0,0,0,0.56)' : 'white';
@@ -21,7 +21,7 @@ export default {
     return theme === 'light' ? 'rgba(0,0,0,0.87)' : 'white';
   },
   getPlaceHolderColor(theme) {
-    return theme === 'light' ? 'rgba(0,0,0,0.34)' : 'rgba(255,255,255,0.5)';
+    return theme === 'light' ? 'rgba(0,0,0,0.34)' : 'rgba(255,255,255,0.56)';
   },
   getSuggestionsBackground({ background, theme }) {
     if (background) {
@@ -51,6 +51,6 @@ export default {
 
   // Lang
   lang() {
-    return lang(locale?.toLowerCase());
+    return lang(locale);
   },
 };

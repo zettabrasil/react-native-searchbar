@@ -37,6 +37,10 @@ type Props = {
    */
   historyTopOffset: Number;
   /**
+   * Use this to save multiple saves of history. Default value: `default`.
+   */
+  storageSuffix: String;
+  /**
    * Default value: `light`.
    */
   theme: 'light' | 'dark';
@@ -46,7 +50,6 @@ type Props = {
 export const SearchBarWrapper = Platform.OS === 'ios' ? React.Fragment : RootSiblingParent;
 
 const ios = Platform.OS === 'ios';
-const KEY_STORE = 'searchbar:history';
 
 function SearchBar(props: Props) {
   const { isIphoneX } = useDimensions();
@@ -63,10 +66,11 @@ function SearchBar(props: Props) {
   const historyTimeout = useRef(-1);
   const searchTimeout = useRef(-1);
 
+  const storeKey = `searchbar:history:${props.storageSuffix}`;
   const lang = helper.lang();
 
   useEffect(() => {
-    AsyncStorage.getItem(KEY_STORE)
+    AsyncStorage.getItem(storeKey)
       .then(data => {
         savedHistory.current = data ? JSON.parse(data) : [];
         history.current = JSON.parse(JSON.stringify(savedHistory.current));
@@ -111,7 +115,7 @@ function SearchBar(props: Props) {
     if (index > -1) {
       const el = savedHistory.current.splice(index, 1);
       savedHistory.current.unshift(el[0]);
-      AsyncStorage.setItem(KEY_STORE, JSON.stringify(savedHistory.current));
+      AsyncStorage.setItem(storeKey, JSON.stringify(savedHistory.current));
     }
     setValue(text);
     input.current.blur();
@@ -126,7 +130,7 @@ function SearchBar(props: Props) {
         if (index > -1) {
           savedHistory.current.splice(index, 1);
           history.current = JSON.parse(JSON.stringify(savedHistory.current));
-          AsyncStorage.setItem(KEY_STORE, JSON.stringify(savedHistory.current));
+          AsyncStorage.setItem(storeKey, JSON.stringify(savedHistory.current));
         }
         updateHistory();
       }},
@@ -197,7 +201,7 @@ function SearchBar(props: Props) {
     if (val && index < 0) {
       savedHistory.current.unshift(val);
       history.current = JSON.parse(JSON.stringify(savedHistory.current));
-      AsyncStorage.setItem(KEY_STORE, JSON.stringify(savedHistory.current));
+      AsyncStorage.setItem(storeKey, JSON.stringify(savedHistory.current));
     }
   };
 
@@ -234,7 +238,7 @@ function SearchBar(props: Props) {
   const backButton = () => {
     const icon = ios ? {
       name: 'chevron-left',
-      size: 32,
+      size: 40,
     } : {
       name: 'arrow-left',
       size: 22,
@@ -317,7 +321,7 @@ function SearchBar(props: Props) {
           onPress={() => onActionButtonPress(search)}
           style={styles.actionButton}
           touchDisabled={false} >
-          <Icon name={search ? 'microphone' : 'magnify'} color={helper.getIconColor(props.theme)} size={22} />
+          <Icon name={search ? 'microphone' : 'magnify'} color={helper.getIconColor(props.theme)} size={24} />
         </ActionButton>
         { !!props.headerRight && props.headerRight }
       </>
@@ -396,8 +400,8 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     flex: 1,
     fontSize: 16,
-    height: 36,
     marginHorizontal: 4,
+    marginVertical: 2,
     paddingVertical: 0,
     paddingHorizontal: 8,
   },
@@ -421,6 +425,7 @@ const styles = StyleSheet.create({
 
 SearchBar.defaultProps = {
   historyTopOffset: 56,
+  storageSuffix: 'default',
   theme: 'light',
 };
 
