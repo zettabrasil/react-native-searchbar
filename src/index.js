@@ -180,6 +180,7 @@ function SearchBar(props: Props) {
     setValue('');
     setSearch(false);
     elements.current.length && onBlur();
+    props.onChangeText && props.onChangeText('');
   };
 
   const onBlur = () => {
