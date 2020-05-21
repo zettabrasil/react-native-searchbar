@@ -28,6 +28,7 @@ type Props = {
    * Background color. This prop must be combined with the `theme` prop.
    */
   background: String;
+  disableAnimations: Boolean;
   inputPlaceholder: String;
   headerLeft: JSX.Element;
   headerRight: JSX.Element;
@@ -45,6 +46,7 @@ type Props = {
    */
   theme: 'light' | 'dark';
   onChangeText(text: String): void;
+  onShow(): void;
 };
 
 export const SearchBarWrapper = Platform.OS === 'ios' ? React.Fragment : RootSiblingParent;
@@ -170,13 +172,16 @@ function SearchBar(props: Props) {
         setSpeech(true);
       }, 100);
     } else {
-      LayoutAnimation.easeInEaseOut();
+      !props.disableAnimations && LayoutAnimation.easeInEaseOut();
       setSearch(v => true);
+      setTimeout(() => {
+        props.onShow && props.onShow();
+      }, 100)
     }
   };
 
   const onBackButtonPress = () => {
-    LayoutAnimation.easeInEaseOut();
+    !props.disableAnimations && LayoutAnimation.easeInEaseOut();
     setValue('');
     setSearch(false);
     elements.current.length && onBlur();
@@ -185,13 +190,13 @@ function SearchBar(props: Props) {
 
   const onBlur = () => {
     history.current = JSON.parse(JSON.stringify(savedHistory.current));
-    LayoutAnimation.easeInEaseOut();
+    !props.disableAnimations && LayoutAnimation.easeInEaseOut();
     destroyHistory();
   };
 
   const onFocus = () => {
     setTimeout(() => {
-      LayoutAnimation.easeInEaseOut();
+      !props.disableAnimations && LayoutAnimation.easeInEaseOut();
       showHistory();
     }, 100);
   };
@@ -425,6 +430,7 @@ const styles = StyleSheet.create({
 });
 
 SearchBar.defaultProps = {
+  disableAnimations: false,
   historyTopOffset: 56,
   storageSuffix: 'default',
   theme: 'light',

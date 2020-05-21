@@ -35,7 +35,7 @@ export default {
   // Modal
   getModalBackground({ background, theme }) {
     if (background) {
-      return Color(background).darken(0.4);
+      return theme === 'light' ? background : Color(background).darken(0.4);
     }
     return theme === 'light' ? 'white' : Color('#121212').lighten(0.4);
   },
