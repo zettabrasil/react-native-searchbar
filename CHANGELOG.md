@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.6](https://github.com/zettabrasil/react-native-searchbar/compare/v1.0.5...v1.0.6) (2020-05-22)
+
+
+### Features
+
+* **voice:** add locale prop & improve voice speech ([1abd973](https://github.com/zettabrasil/react-native-searchbar/commit/1abd973235fbce8dd2ecd0bf800c65f0013e8449))
+
 ### [1.0.5](https://github.com/zettabrasil/react-native-searchbar/compare/v1.0.4...v1.0.5) (2020-05-22)
 
 
