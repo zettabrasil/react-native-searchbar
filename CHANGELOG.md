@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.5](https://github.com/zettabrasil/react-native-searchbar/compare/v1.0.4...v1.0.5) (2020-05-22)
+
+
+### Features
+
+* add method to dismiss ([baed77a](https://github.com/zettabrasil/react-native-searchbar/commit/baed77a4eeae0b1a5e3043b2ef48367432d83615))
+
 ### [1.0.4](https://github.com/zettabrasil/react-native-searchbar/compare/v1.0.3...v1.0.4) (2020-05-21)
 
 
