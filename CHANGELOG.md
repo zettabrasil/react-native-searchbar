@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.8](https://github.com/zettabrasil/react-native-searchbar/compare/v1.0.7...v1.0.8) (2020-05-22)
+
+
+### Bug Fixes
+
+* **voice:** speech voice onStop event ([ef1ab8d](https://github.com/zettabrasil/react-native-searchbar/commit/ef1ab8d66fc733975e9c275b5459dfdbac901da5))
+
 ### [1.0.7](https://github.com/zettabrasil/react-native-searchbar/compare/v1.0.6...v1.0.7) (2020-05-22)
 
 ### [1.0.6](https://github.com/zettabrasil/react-native-searchbar/compare/v1.0.5...v1.0.6) (2020-05-22)
