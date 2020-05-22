@@ -34,8 +34,6 @@
   },
   "homepage": "https://github.com/zettabrasil/react-native-searchbar#readme",
   "dependencies": {
-    "@react-native-community/async-storage": "^1.10.0",
-    "@react-native-community/voice": "^1.1.4",
     "color": "^3.1.2",
     "react-native-platform-touchable": "^1.1.1",
     "react-native-root-siblings": "^4.0.6"
@@ -47,5 +45,12 @@
     "cz-conventional-changelog": "^3.2.0",
     "husky": "^4.2.5",
     "standard-version": "^8.0.0"
+  },
+  "peerDependencies": {
+    "@react-native-community/async-storage": "^1.10.0",
+    "@react-native-community/voice": "^1.1.4",
+    "color": "^3.1.2",
+    "react-native-platform-touchable": "^1.1.1",
+    "react-native-root-siblings": "^4.0.6"
   }
 }

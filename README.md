@@ -7,13 +7,32 @@
 
 ## Install
 
-Before install this, take a look on this library:
-- [@react-native-community/voice](https://github.com/react-native-community/voice#table-of-contents).
-
-Installation
-
 ```
 npm i -S @zettabrasil/react-native-searchbar
+```
+
+We will need to install first the following libraries to get this working well:
+
+### [@react-native-community/voice](https://github.com/react-native-community/voice#react-native-voice).
+```
+npm i -S @react-native-community/voice
+```
+Need to include permissions for `NSMicrophoneUsageDescription` and `NSSpeechRecognitionUsageDescription` inside Info.plist for iOS. See the included `VoiceTest` for how to handle these cases.
+
+```xml
+<dict>
+  ...
+  <key>NSMicrophoneUsageDescription</key>
+  <string>Description of why you require the use of the microphone</string>
+  <key>NSSpeechRecognitionUsageDescription</key>
+  <string>Description of why you require the use of the speech recognition</string>
+  ...
+</dict>
+```
+
+### [@react-native-community/async-storage](https://github.com/react-native-community/async-storage#react-native-async-storage).
+```
+npm i -S @react-native-community/async-storage
 ```
 
 Link the iOS package
