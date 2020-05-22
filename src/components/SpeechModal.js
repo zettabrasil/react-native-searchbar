@@ -59,7 +59,7 @@ function Speech(props: Props) {
 
     try {
       Voice.onSpeechPartialResults = e => {
-        savedResults.current = e?.value[0]?.toLocaleLowerCase()?.trim();
+        savedResults.current = e?.value[0]?.toLowerCase()?.trim();
         setResults(savedResults.current);
       };
       Voice.onSpeechStart = e => {
@@ -67,10 +67,10 @@ function Speech(props: Props) {
         setLoaded(!e.error);
       };
       Voice.onSpeechEnd = e => {
-        setStopped(true);
+        setStopped(!savedResults.current);
       };
       Voice.onSpeechError = e => {
-        setStopped(true);
+        setStopped(!savedResults.current);
       };
 
       Voice.start(lang.speech_voice_config);
