@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { BackHandler, Dimensions, Platform } from 'react-native';
+import Events from './events';
 
 const w = Dimensions.get('window'),
   s = Dimensions.get('screen'),
@@ -44,4 +45,31 @@ export function useDimensions() {
   }, []);
 
   return state;
+}
+
+export function useEvents(event, callback) {
+  const savedCallback = useRef();
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  useEffect(() => {
+    if (event) {
+      const listener = Events.on(event, savedCallback.current);
+      return () => listener.remove();
+    }
+  }, []);
+
+  function dispatch(evt: EventsTypeI, param) {
+    Events.fire(evt);
+  }
+
+  if (event) {
+    return;
+  }
+
+  return {
+    dispatch,
+  };
 }

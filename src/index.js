@@ -21,7 +21,8 @@ import {
   Title,
 } from './components';
 import helper from './helper';
-import { useBackHandler, useDimensions } from './hooks';
+import { useBackHandler, useDimensions, useEvents } from './hooks';
+import Events from './hooks/events';
 
 type Props = {
   /**
@@ -92,6 +93,12 @@ function SearchBar(props: Props) {
     return false;
   });
 
+  useEvents('dismiss', suffix => {
+    if (props?.storageSuffix === suffix) {
+      searchRef.current && onBackButtonPress();
+    }
+  });
+
   const showHistory = () => {
     if (elements.current.length) {
       return;
@@ -121,7 +128,7 @@ function SearchBar(props: Props) {
     }
     setValue(text);
     input.current.blur();
-    props.onChangeText && props.onChangeText(text?.toLowerCase()?.trim());
+    props.onChangeText && props.onChangeText(text);
   };
 
   const onHistoryDelete = (text) => {
@@ -162,7 +169,9 @@ function SearchBar(props: Props) {
     }
     setValue('');
     input.current.focus();
-    props.onChangeText && props.onChangeText('');
+    setTimeout(() => {
+      props.onChangeText && props.onChangeText('');
+    }, 100);
   };
 
   const onActionButtonPress = mic => {
@@ -185,7 +194,9 @@ function SearchBar(props: Props) {
     setValue('');
     setSearch(false);
     elements.current.length && onBlur();
-    props.onChangeText && props.onChangeText('');
+    setTimeout(() => {
+      props.onChangeText && props.onChangeText('');
+    }, 200);
   };
 
   const onBlur = () => {
@@ -287,6 +298,7 @@ function SearchBar(props: Props) {
       <View style={styles.flex} >
         <TextInput
           autoCapitalize='none'
+          autoCorrect={false}
           autoFocus={true}
           disableFullscreenUI={true}
           onBlur={onBlur}
@@ -435,5 +447,9 @@ SearchBar.defaultProps = {
   storageSuffix: 'default',
   theme: 'light',
 };
+
+SearchBar.dismiss = function(suffix) {
+  Events.fire('dismiss', suffix);
+}
 
 export default SearchBar;
