@@ -46,17 +46,6 @@ function Speech(props: Props) {
   };
 
   useEffect(() => {
-    Voice.onSpeechPartialResults = e => {
-      savedResults.current = e?.value[0]?.toLocaleLowerCase()?.trim();
-      setResults(savedResults.current);
-    };
-
-    return () => {
-      Voice.destroy().then(Voice.removeAllListeners);
-    };
-  }, []);
-
-  useEffect(() => {
     if (props.visible) {
       onStart();
     } else {
