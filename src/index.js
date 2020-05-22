@@ -39,6 +39,10 @@ type Props = {
    */
   historyTopOffset: Number;
   /**
+   * The default value comes from the device system settings.
+   */
+  locale: 'en_us' | 'pt_br';
+  /**
    * Use this to save multiple saves of history. Default value: `default`.
    */
   storageSuffix: String;
@@ -70,7 +74,7 @@ function SearchBar(props: Props) {
   const searchTimeout = useRef(-1);
 
   const storeKey = `searchbar:history:${props.storageSuffix}`;
-  const lang = helper.lang();
+  const lang = helper.lang(props.locale);
 
   useEffect(() => {
     AsyncStorage.getItem(storeKey)
@@ -381,6 +385,7 @@ function SearchBar(props: Props) {
 
       <SpeechModal
         background={props.background}
+        locale={props.locale}
         onRequestClose={onSpeechResults}
         theme={props.theme}
         visible={speech}

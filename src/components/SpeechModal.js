@@ -14,13 +14,23 @@ import ActionButton from './ActionButton';
 
 type Props = {
   background: String;
+  locale: 'en_us' | 'pt_br';
   onRequestClose(results: String): void;
   theme: 'light' | 'dark',
   visible: Boolean;
 }
 
 function Speech(props: Props) {
+  const lang = helper.lang(props.locale);
+
+  const [loaded, setLoaded] = useState(false);
   const [results, setResults] = useState('');
+  const [error, setError] = useState(false);
+  const [stopped, setStopped] = useState(false);
+
+  const listening = getListeningLabel(lang, loaded, error, stopped);
+  const placeholder = error || !loaded ? '...' : lang.speech_placeholder_label;
+
   const savedResults = useRef('');
 
   const backgroundStyle = { backgroundColor: helper.getModalBackground(props) };
@@ -30,8 +40,6 @@ function Speech(props: Props) {
     fontSize: results ? 18 : 16,
     fontWeight: results ? 'bold' : 'normal',
   };
-
-  const lang = helper.lang();
 
   const onRequestClose = () => {
     props.onRequestClose && props.onRequestClose(savedResults.current);
@@ -50,13 +58,56 @@ function Speech(props: Props) {
 
   useEffect(() => {
     if (props.visible) {
-      setResults('');
-      savedResults.current = '';
-      Voice.start(lang.speech_voice_config);
+      onStart();
     } else {
-      Voice.stop();
+      onStop();
     }
   }, [props.visible]);
+
+  const onStart = () => {
+    setResults('');
+    savedResults.current = '';
+
+    try {
+      Voice.onSpeechPartialResults = e => {
+        savedResults.current = e?.value[0]?.toLocaleLowerCase()?.trim();
+        setResults(savedResults.current);
+      };
+      Voice.onSpeechStart = e => {
+        setError(e.error);
+        setLoaded(!e.error);
+      };
+      Voice.onSpeechEnd = e => {
+        setStopped(true);
+      };
+      Voice.onSpeechError = e => {
+        setStopped(true);
+      };
+
+      Voice.start(lang.speech_voice_config);
+    } catch (e) {
+      setError(true);
+    }
+  };
+
+  const onStop = async () => {
+    try {
+      await Voice.stop();
+      await Voice.destroy();
+      Voice.removeAllListeners();
+    } catch (e) {
+      return null;
+    } finally {
+      setLoaded(false);
+      setError(false);
+      setStopped(false);
+    }
+  };
+
+  const onRestart = () => {
+    setStopped(false);
+    Voice.start(lang.speech_voice_config).catch(() => null);
+  };
 
   const actionButton = () => {
     return (
@@ -87,11 +138,19 @@ function Speech(props: Props) {
           <View style={[styles.card, backgroundStyle]} >
             <View style={styles.body} >
               <Text style={[styles.listening, titleStyle]} >
-                { lang.speech_listening_label }
+                { listening }
               </Text>
-              <Text style={[styles.results, speechStyle]} >
-                {`"${results || lang.speech_placeholder_label}"`}
-              </Text>
+
+              {stopped ? (
+                <Text onPress={onRestart} style={[styles.results, speechStyle]} >
+                  {`[ ${lang.speech_restart_label} ]`}
+                </Text>
+              ) : (
+                <Text style={[styles.results, speechStyle]} >
+                  {`"${results || placeholder}"`}
+                </Text>
+              )}
+
             </View>
             <View style={styles.button} >
               { actionButton() }
@@ -102,6 +161,19 @@ function Speech(props: Props) {
     </Modal>
   );
 }
+
+const getListeningLabel = (lng, l, e, s) => {
+  if (!l) {
+    return lng.speech_loading_label;
+  }
+  if (e) {
+    return lng.speech_failure_label;
+  }
+  if (s) {
+    return lng.speech_stoped_label;
+  }
+  return lng.speech_listening_label;
+};
 
 const styles = StyleSheet.create({
   flex: {

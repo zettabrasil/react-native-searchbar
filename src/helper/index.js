@@ -50,7 +50,7 @@ export default {
   },
 
   // Lang
-  lang() {
-    return lang(locale);
+  lang(val) {
+    return lang(locale, val);
   },
 };
