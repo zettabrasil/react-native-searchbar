@@ -14,7 +14,7 @@
   "dependencies": {
     "@react-native-community/async-storage": "^1.10.0",
     "@react-native-community/voice": "^1.1.4",
-    "@zettabrasil/react-native-searchbar": "^1.0.8",
+    "@zettabrasil/react-native-searchbar": "^1.0.10",
     "color": "^3.1.2",
     "react": "16.11.0",
     "react-native": "0.62.2",
