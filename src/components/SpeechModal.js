@@ -63,13 +63,13 @@ function Speech(props: Props) {
         setResults(savedResults.current);
       };
       Voice.onSpeechStart = e => {
-        setError(e.error);
-        setLoaded(!e.error);
+        setError(e?.error);
+        setLoaded(!e?.error);
       };
-      Voice.onSpeechEnd = e => {
+      Voice.onSpeechEnd = () => {
         setStopped(!savedResults.current);
       };
-      Voice.onSpeechError = e => {
+      Voice.onSpeechError = () => {
         setStopped(!savedResults.current);
       };
 
