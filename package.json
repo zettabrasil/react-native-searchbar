@@ -39,12 +39,12 @@
     "react-native-root-siblings": "^4.0.6"
   },
   "devDependencies": {
-    "@commitlint/cli": "^8.3.5",
-    "@commitlint/config-conventional": "^8.3.4",
+    "@commitlint/cli": "^12.1.1",
+    "@commitlint/config-conventional": "^12.1.1",
     "commitizen": "^4.1.2",
     "cz-conventional-changelog": "^3.2.0",
     "husky": "^4.2.5",
-    "standard-version": "^8.0.0"
+    "standard-version": "^9.3.0"
   },
   "peerDependencies": {
     "@react-native-community/async-storage": "^1.10.0",
