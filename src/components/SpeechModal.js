@@ -7,7 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import Voice from '@react-native-community/voice';
+import Voice from '@react-native-voice/voice';
 import helper from '../helper';
 import Icon from './Icon';
 import ActionButton from './ActionButton';
