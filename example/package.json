@@ -17,7 +17,7 @@
     "@zettabrasil/react-native-searchbar": "^1.0.10",
     "color": "^3.1.2",
     "react": "16.11.0",
-    "react-native": "0.62.2",
+    "react-native": "0.62.3",
     "react-native-platform-touchable": "^1.1.1",
     "react-native-root-siblings": "^4.0.6"
   },
